@@ -1,9 +1,11 @@
 {
   "name": "template-vanilla",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
@@ -37,5 +39,9 @@
   "volta": {
     "node": "22.11.0",
     "npm": "10.9.0"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.2",
+    "fastify": "^5.2.1"
   }
 }
