@@ -1,6 +1,7 @@
 export const HTTP_METHODS = {
   get: 'GET',
   post: 'POST',
+  patch: 'PATCH',
   delete: 'DELETE',
 };
 

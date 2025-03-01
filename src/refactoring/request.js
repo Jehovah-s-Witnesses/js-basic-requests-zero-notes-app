@@ -22,6 +22,23 @@ export const createNote = (note, resultCallback) => {
   );
 };
 
+/**
+ *
+ * @param {Object} note
+ * @param {string} note.text
+ * @param resultCallback
+ */
+
+export const changeNote = (id, note, resultCallback) => {
+  sendRequest(
+    `${baseURL}/users/${id}`,
+    HTTP_METHODS.patch,
+    resultCallback,
+    JSON.stringify(note),
+    { 'content-type': 'application/json' },
+  );
+};
+
 export const deleteNote = (id, resultCallback) => {
   sendRequest(`${baseURL}/users/${id}`, HTTP_METHODS.delete, resultCallback);
 };

@@ -15,6 +15,7 @@ export function addNoteToUI(note) {
    <h5 class="card-header">${note.text}</h5>
    <div class="card-body">
    <button data-type="delete" class="btn btn-danger">Delete</button>
+    <button data-type="edit" type="submit" class="btn btn-primary">Edit</button>
    </div>
 `;
   noteContainer.append(noteCard);

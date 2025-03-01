@@ -1,9 +1,14 @@
-import { createNote, getNotes, deleteNote } from './request.js';
+import { createNote, getNotes, deleteNote, changeNote } from './request.js';
 import { addNoteToUI, noteContainer } from './refactor-render.js';
 import { validateTextField } from './refactor-validate.js';
 
 const formElement = document.querySelector('form');
 const textareaElement = document.querySelector('textarea');
+const modalElement = document.querySelector('.modal');
+const textAreaModalElement = document.querySelector('.modal-text');
+const modalButton = document.querySelector('[data-bs-dismiss="modal"]');
+const modalCloseButton = document.querySelector('.button-close');
+const modalSaveButton = document.querySelector('.button-change');
 
 getNotes((response) => {
   const notes = JSON.parse(response);
@@ -29,17 +34,53 @@ formElement.addEventListener('submit', (event) => {
   }
 });
 
+const openModal = () => {
+  modalElement.classList.add('show');
+  modalElement.classList.remove('fade');
+};
+
+const closeModal = () => {
+  modalElement.classList.add('fade');
+  modalElement.classList.remove('show');
+};
+
 noteContainer.onclick = (event) => {
   const targetClick = event.target;
+  const noteElement = targetClick.closest('div.card');
+  const noteText = noteContainer.querySelector('.card-header');
 
   if (
     targetClick.tagName === 'BUTTON' &&
     targetClick.dataset.type === 'delete'
   ) {
-    const deleteItem = targetClick.closest('div.card');
+    const deleteItem = noteElement;
 
     deleteNote(deleteItem.dataset.id, () => {
       deleteItem.remove();
     });
+  } else if (
+    targetClick.tagName === 'BUTTON' &&
+    targetClick.dataset.type === 'edit'
+  ) {
+    textAreaModalElement.value = noteText.textContent;
+    openModal();
   }
 };
+
+modalButton.onclick = closeModal;
+modalCloseButton.onclick = closeModal;
+
+modalSaveButton.addEventListener('click', () => {
+  const noteWrapper = noteContainer.querySelector('.card');
+  const noteText = noteContainer.querySelector('.card-header');
+  const modalNote = {
+    text: textAreaModalElement.value,
+  };
+  if (validateTextField(textAreaModalElement)) {
+    changeNote(noteWrapper.dataset.id, modalNote, (noteResult) => {
+      const parseModalNote = JSON.parse(noteResult);
+      noteText.textContent = parseModalNote.text;
+      closeModal();
+    });
+  }
+});
