@@ -31,7 +31,7 @@ export const createNote = (note, resultCallback) => {
 
 export const changeNote = (id, note, resultCallback) => {
   sendRequest(
-    `${baseURL}/users/${id}`,
+    `${baseURL}/notes/${id}`,
     HTTP_METHODS.patch,
     resultCallback,
     JSON.stringify(note),
@@ -40,5 +40,5 @@ export const changeNote = (id, note, resultCallback) => {
 };
 
 export const deleteNote = (id, resultCallback) => {
-  sendRequest(`${baseURL}/users/${id}`, HTTP_METHODS.delete, resultCallback);
+  sendRequest(`${baseURL}/notes/${id}`, HTTP_METHODS.delete, resultCallback);
 };

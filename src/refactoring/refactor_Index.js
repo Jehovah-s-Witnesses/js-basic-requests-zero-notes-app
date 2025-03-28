@@ -9,6 +9,8 @@ const textAreaModalElement = document.querySelector('.modal-text');
 const modalButton = document.querySelector('[data-bs-dismiss="modal"]');
 const modalCloseButton = document.querySelector('.button-close');
 const modalSaveButton = document.querySelector('.button-change');
+let currentNoteElement;
+let currentNoteId;
 
 getNotes((response) => {
   const notes = JSON.parse(response);
@@ -46,14 +48,15 @@ const closeModal = () => {
 
 noteContainer.onclick = (event) => {
   const targetClick = event.target;
-  const noteElement = targetClick.closest('div.card');
-  const noteText = noteContainer.querySelector('.card-header');
+  currentNoteElement = targetClick.closest('div.card');
+  const noteText = currentNoteElement.querySelector('.card-header');
+  currentNoteId = currentNoteElement.dataset.id;
 
   if (
     targetClick.tagName === 'BUTTON' &&
     targetClick.dataset.type === 'delete'
   ) {
-    const deleteItem = noteElement;
+    const deleteItem = currentNoteElement;
 
     deleteNote(deleteItem.dataset.id, () => {
       deleteItem.remove();
@@ -71,15 +74,15 @@ modalButton.onclick = closeModal;
 modalCloseButton.onclick = closeModal;
 
 modalSaveButton.addEventListener('click', () => {
-  const noteWrapper = noteContainer.querySelector('.card');
-  const noteText = noteContainer.querySelector('.card-header');
+  const currentNoteText = currentNoteElement.querySelector('.card-header');
+
   const modalNote = {
     text: textAreaModalElement.value,
   };
   if (validateTextField(textAreaModalElement)) {
-    changeNote(noteWrapper.dataset.id, modalNote, (noteResult) => {
+    changeNote(currentNoteId, modalNote, (noteResult) => {
       const parseModalNote = JSON.parse(noteResult);
-      noteText.textContent = parseModalNote.text;
+      currentNoteText.textContent = parseModalNote.text;
       closeModal();
     });
   }
